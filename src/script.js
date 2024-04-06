@@ -69,6 +69,7 @@ const app = () => {
   clearButton.addEventListener("click", () => {
     messageHistory = []
     localStorage.setItem("history", JSON.stringify(messageHistory))
+    messagesDiv.innerHTML = ""
   })
 
   if(messageHistory.length > 0) {

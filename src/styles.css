@@ -5,6 +5,7 @@
     --text: #fff;
     --accent: #00aa4a;
     --secondary: #666;
+    box-sizing: border-box;
 }
 
 body {
@@ -17,28 +18,28 @@ body {
     align-items: center;
 }
 
-button {
-    position: fixed;
-    bottom: 52px;
-    left: 76%;
-    width: 3vw;
-    height: 5vh;
+button[type=submit] {
+    position: relative;
+    top: 0.25rem;
+    left: -2.5rem;
+    width: 2rem;
+    height: 2rem;
     background-image: url('../assets/images-removebg-preview.png');
     background-size: contain;
     background-repeat: no-repeat;
-    border: none; 
+    border: none;
     border-radius: 5px;
     outline: none;
     cursor: pointer;
 }
 
-button:hover {
+button[type=submit]:hover {
     background-color: #292b2948;
 }
 
 input {
     width: 60vw;
-    height: 5vh;
+    padding: .75rem;
     border-radius: 15px;
     font-size: 2vmin;
 }
@@ -84,4 +85,22 @@ input {
 .chat-label {
     font-size: 3vmin;
     font-family: "Kanit";
+}
+
+#clear {
+  padding: 0.5rem;
+  border: 1px solid var(--secondary);
+  background-color: var(--bg);
+  color: var(--secondary);
+  border-radius: 0.5rem;
+  letter-spacing: 1px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: all 0.2s ease;
+}
+
+#clear:hover {
+  color: var(--text);
+  border-color: var(--text)
 }
