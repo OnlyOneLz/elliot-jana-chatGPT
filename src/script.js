@@ -1,4 +1,5 @@
 import config from '../config.js'
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
 const app = () => {
     // Query Selectors
@@ -45,8 +46,8 @@ const app = () => {
     form.addEventListener('submit',async function (event) {
         event.preventDefault()
         const apiResponse = await apiFetch()
-        displayChatMessage(apiResponse.choices[0].message.content, "answer")
+        const messageContent = apiResponse.choices[0].message.content
+        displayChatMessage(marked.parse(messageContent), "answer")
     })
-
 }
 app()
