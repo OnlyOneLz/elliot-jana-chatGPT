@@ -3,6 +3,14 @@ import config from '../config.js'
 const app = () => {
     // Query Selectors
     const form = document.querySelector('.chat-form')
+    const messagesDiv = document.querySelector("#chat-messages")
+
+    const displayChatMessage =  (content) => {
+      console.log(content)
+      const thisMessage = document.createElement("div")
+      thisMessage.innerHTML = content
+      messagesDiv.appendChild(thisMessage)
+    }
 
     // Functions
     const apiFetch = async () => {
@@ -32,9 +40,10 @@ const app = () => {
     }
 
     // Event Listeners
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit',async function (event) {
         event.preventDefault()
-        const apiResponse = apiFetch()
+        const apiResponse = await apiFetch()
+        displayChatMessage(apiResponse.choices[0].message.content)
     })
 
 }
