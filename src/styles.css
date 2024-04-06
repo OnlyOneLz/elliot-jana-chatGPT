@@ -6,6 +6,8 @@
     --accent: #00aa4a;
     --secondary: #666;
     box-sizing: border-box;
+    font-size: 2vmin;
+
 }
 
 body {
@@ -42,6 +44,7 @@ input {
     padding: .75rem;
     border-radius: 15px;
     font-size: 2vmin;
+    border: 0
 }
 
 #chat-messages {
