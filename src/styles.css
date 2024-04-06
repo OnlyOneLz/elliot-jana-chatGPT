@@ -1,0 +1,26 @@
+:root {
+  --bg: #292b29;
+  --text: #fff;
+  --accent: #00aa4a;
+  --secondary: #666;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text)
+}
+
+button {
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  background-color: var(--bg);
+  border: 1px solid var(--secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+input {
+
+}
