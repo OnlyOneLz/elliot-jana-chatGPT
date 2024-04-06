@@ -9,14 +9,14 @@ const app = () => {
       console.log(content)
       const thisMessage = document.createElement("div")
       thisMessage.classList.add(role)
-      thisMessage.innerHTML = content
+      thisMessage.innerHTML = content 
       messagesDiv.appendChild(thisMessage)
     }
 
     // Functions
     const apiFetch = async () => {
         const formInput = document.getElementById('chat-input').value
-        displayChatMessage(formInput, "question")
+        displayChatMessage(formInput + '?', "question")
         try {
             const response = await fetch(config.apiUrl, {
                 method: "POST",

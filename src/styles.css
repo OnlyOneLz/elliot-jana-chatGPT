@@ -1,26 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Croissant+One&family=Kanit:wght@500&family=Kumar+One&family=Oswald:wght@200&family=Rubik+Iso&family=Titillium+Web:wght@200&family=Victor+Mono:wght@100&family=Young+Serif&display=swap');
+
 :root {
-  --bg: #292b29;
-  --text: #fff;
-  --accent: #00aa4a;
-  --secondary: #666;
+    --bg: #292b29;
+    --text: #fff;
+    --accent: #00aa4a;
+    --secondary: #666;
 }
 
 body {
-  margin: 0;
-  background-color: var(--bg);
-  color: var(--text)
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 button {
-  padding: 0.5rem 1rem;
-  color: var(--text);
-  background-color: var(--bg);
-  border: 1px solid var(--secondary);
-  cursor: pointer;
-  border-radius: 4px;
-  letter-spacing: 1px;
+    position: fixed;
+    bottom: 52px;
+    left: 76%;
+    width: 3vw;
+    height: 5vh;
+    background-image: url('../assets/images-removebg-preview.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none; 
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #292b2948;
 }
 
 input {
+    width: 60vw;
+    height: 5vh;
+    border-radius: 15px;
+    font-size: 2vmin;
+}
 
+#chat-messages {
+    width: 70vW;
+    max-height: 70vh;
+    font-size: 3vmin;
+    line-height: 4vmin;
+    display: flex;
+    flex-direction: column;
+    gap: 2vmin;
+    padding: 2vh 2vw 0 2vw;
+}
+
+.question {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.answer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.chat-form {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    bottom: 6%;
+}
+
+.input-submit {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.chat-label {
+    font-size: 3vmin;
+    font-family: "Kanit";
 }
