@@ -5,9 +5,10 @@ const app = () => {
     const form = document.querySelector('.chat-form')
     const messagesDiv = document.querySelector("#chat-messages")
 
-    const displayChatMessage =  (content) => {
+    const displayChatMessage =  (content, role) => {
       console.log(content)
       const thisMessage = document.createElement("div")
+      thisMessage.classList.add(role)
       thisMessage.innerHTML = content
       messagesDiv.appendChild(thisMessage)
     }
@@ -15,6 +16,7 @@ const app = () => {
     // Functions
     const apiFetch = async () => {
         const formInput = document.getElementById('chat-input').value
+        displayChatMessage(formInput, "question")
         try {
             const response = await fetch(config.apiUrl, {
                 method: "POST",
@@ -43,7 +45,7 @@ const app = () => {
     form.addEventListener('submit',async function (event) {
         event.preventDefault()
         const apiResponse = await apiFetch()
-        displayChatMessage(apiResponse.choices[0].message.content)
+        displayChatMessage(apiResponse.choices[0].message.content, "answer")
     })
 
 }
