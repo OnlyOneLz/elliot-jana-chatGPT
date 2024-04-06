@@ -6,9 +6,12 @@ const app = () => {
   const form = document.querySelector('.chat-form')
   const formInput = document.getElementById('chat-input')
   const messagesDiv = document.querySelector("#chat-messages")
+  const clearButton = document.getElementById("clear")
 
   // state
-  const messageHistory = []
+  let messageHistory = localStorage.getItem("history") ? JSON.parse(localStorage.getItem("history")) : []
+  console.log(messageHistory)
+
 
   // Functions
   const updateMessageHistory = (data, role) => {
@@ -16,6 +19,7 @@ const app = () => {
       role: role,
       content: data
     })
+    localStorage.setItem("history", JSON.stringify(messageHistory))
   }
 
   const displayChatMessage = (content, role) => {
@@ -61,5 +65,16 @@ const app = () => {
     updateMessageHistory(messageContent, "assistant")
     displayChatMessage(marked.parse(messageContent), "answer")
   })
+
+  clearButton.addEventListener("click", () => {
+    messageHistory = []
+    localStorage.setItem("history", JSON.stringify(messageHistory))
+  })
+
+  if(messageHistory.length > 0) {
+    messageHistory.forEach(({role, content}) => {
+      displayChatMessage(content, role === "user" ? "question" : "answer")
+    })
+  }
 }
 app()
