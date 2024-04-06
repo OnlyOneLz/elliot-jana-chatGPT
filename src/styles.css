@@ -11,7 +11,7 @@ body {
     margin: 0;
     background-color: var(--bg);
     color: var(--text);
-    height: 100vh;
+    height: 120vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,6 +64,10 @@ input {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+h2 {
+    font-size: 3vmin;
 }
 
 .chat-form {

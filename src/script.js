@@ -18,12 +18,46 @@ const app = () => {
     })
   }
 
-  const displayChatMessage = (content, role) => {
-    const thisMessage = document.createElement("div")
-    thisMessage.classList.add(role)
-    thisMessage.innerHTML = content
-    messagesDiv.appendChild(thisMessage)
-  }
+  const displayChatMessage = (content, role, slowDisplay) => {
+    const thisMessage = document.createElement("div");
+    thisMessage.classList.add(role);
+    const messageTitle = document.createElement("h2")
+    messageTitle.classList.add(role);
+
+
+    if (role === 'question'){
+      messageTitle.innerHTML = 'You'
+    } else {
+      messageTitle.innerHTML = 'Chat GPT'
+    }
+  
+    async function displayTextLetterByLetter(text, element, role) {
+        // Function to remove <p> tag element labels from text
+        const removePElementLabels = (str) => str.replace(/<p[^>]*>|<\/p>/gm, '');
+      
+        // Remove <p> tag element labels from the content
+        const contentWithoutPTags = removePElementLabels(text);
+      
+        for (let i = 0; i < contentWithoutPTags.length; i++) {
+          // Display slowly only if role is 'answer'
+          if (role === 'answer') {
+            await new Promise(resolve => setTimeout(() => {
+              element.innerHTML += contentWithoutPTags.charAt(i);
+              resolve();
+            }, 20));
+          } else {
+            // Append the characters without delay
+            element.innerHTML += contentWithoutPTags.charAt(i);
+          }
+        }
+    }
+      
+      displayTextLetterByLetter(content, thisMessage, role);
+      
+      messagesDiv.appendChild(messageTitle);
+      messagesDiv.appendChild(thisMessage)
+}
+      
 
   const apiFetch = async () => {
     try {
@@ -54,7 +88,7 @@ const app = () => {
   form.addEventListener('submit', async function (event) {
     event.preventDefault()
     const query = formInput.value
-    displayChatMessage(query, "question")
+    displayChatMessage(query + '?', "question")
     updateMessageHistory(query, "user")
     const apiResponse = await apiFetch()
     const messageContent = apiResponse.choices[0].message.content
