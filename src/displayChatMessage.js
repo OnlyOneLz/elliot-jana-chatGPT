@@ -1,4 +1,4 @@
-import displayTextLetterByLetter from "./displayTextLetterByLetter";
+import displayTextLetterByLetter from "./displayTextLetterByLetter.js";
 
 const displayChatMessage = (content, role, messagesDiv) => {
     const thisMessage = document.createElement("div");
@@ -12,11 +12,11 @@ const displayChatMessage = (content, role, messagesDiv) => {
     } else {
       messageTitle.innerHTML = 'Chat GPT'
     }
-      
+
       displayTextLetterByLetter(content, thisMessage, role);
-      
+
       messagesDiv.appendChild(messageTitle);
       messagesDiv.appendChild(thisMessage)
 }
-      
+
 export default displayChatMessage
