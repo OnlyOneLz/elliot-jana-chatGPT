@@ -1,4 +1,6 @@
-const apiFetch = async () => {
+import config from "../config.js"
+
+const apiFetch = async (messageHistory) => {
     try {
       const response = await fetch(config.apiUrl, {
         method: "POST",
@@ -14,7 +16,10 @@ const apiFetch = async () => {
       const data = await response.json()
       if (response.ok) {
         console.log(data)
-        return data
+        return {
+          data: data,
+          response: response
+        }
       } else {
         throw new Error
       }

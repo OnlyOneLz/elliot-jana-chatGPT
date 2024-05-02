@@ -1,4 +1,4 @@
-const updateMessageHistory = (data, role) => {
+const updateMessageHistory = (data, role, messageHistory) => {
     messageHistory.push({
       role: role,
       content: data
