@@ -15,7 +15,7 @@ const apiFetch = async (messageHistory) => {
       })
       const data = await response.json()
       if (response.ok) {
-        console.log(data)
+        // console.log(data)
         return {
           data: data,
           response: response

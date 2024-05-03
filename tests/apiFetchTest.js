@@ -10,3 +10,8 @@ test("it returns status 200", async () => {
   }])
   equal(res.response.status, 200)
 })
+
+test("it catches errors", async () => {
+  const res = await apiFetch(["invalid input"])
+  equal(res, undefined)
+})
