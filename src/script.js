@@ -34,7 +34,7 @@ const app = () => {
 
   if(messageHistory.length > 0) {
     messageHistory.forEach(({role, content}) => {
-      displayChatMessage(content, role === "user" ? "question" : "answer")
+      displayChatMessage(content, role === "user" ? "question" : "answer", messagesDiv)
     })
   }
 }
