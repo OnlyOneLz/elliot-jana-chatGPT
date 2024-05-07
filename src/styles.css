@@ -6,11 +6,10 @@
     --accent: #00aa4a;
     --secondary: #666;
     box-sizing: border-box;
-    font-size: 2vmin;
+  }
 
-}
-
-body {
+  body {
+    font-size: clamp(1rem, 3vmin, 2rem);
     margin: 0;
     background-color: var(--bg);
     color: var(--text);
@@ -20,58 +19,41 @@ body {
     align-items: center;
 }
 
-button[type=submit] {
-    position: relative;
-    top: 0.25rem;
-    left: -2.5rem;
-    width: 2rem;
-    height: 2rem;
-    background-image: url('../assets/images-removebg-preview.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-}
-
-button[type=submit]:hover {
-    background-color: #292b2948;
-}
-
-input {
-    width: 60vw;
-    padding: .75rem;
-    border-radius: 15px;
-    font-size: 2vmin;
-    border: 0
+h1 {
+  letter-spacing: 1px;
+  margin: 0.5rem;
 }
 
 #chat-messages {
-    width: 70vW;
+    width: 80%;
     max-height: 70vh;
-    font-size: 3vmin;
-    line-height: 4vmin;
     display: flex;
     flex-direction: column;
-    gap: 2vmin;
+    gap: 1rem;
     padding: 2vh 2vw 0 2vw;
 }
 
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.message p, .message h2 {
+  margin: 0;
+}
+
 .question {
-    display: flex;
-    flex-direction: column;
     align-items: flex-end;
 }
 
-.answer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.message h2 {
+    font-size: inherit;
+    font-style: italic;
 }
 
-h2 {
-    font-size: 3vmin;
+h2.answer {
+  color: var(--accent)
 }
 
 .chat-form {
@@ -87,6 +69,33 @@ h2 {
     display: flex;
     justify-content: center;
     flex-direction: row;
+}
+input {
+    width: 70vw;
+    padding: .75rem;
+    border-radius: 15px;
+    border: 0;
+    flex-grow: 1;
+}
+
+button[type=submit] {
+  position: relative;
+  top: 0.25rem;
+  left: -2.5rem;
+  width: 2rem;
+  height: 2rem;
+  background-image: url('../assets/images-removebg-preview.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  flex-grow: 0;
+}
+
+button[type=submit]:hover {
+  background-color: #292b2948;
 }
 
 .chat-label {
@@ -110,4 +119,15 @@ h2 {
 #clear:hover {
   color: var(--text);
   border-color: var(--text)
+}
+
+
+@media (width > 500px) {
+  #chat-messages {
+    width: 70vw;
+  }
+
+  input {
+    width: 60vw;
+  }
 }
