@@ -1,7 +1,7 @@
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
-import updateMessageHistory from '../updateMessageHistory.js';
-import apiFetch from '../apiFetch.js';
-import displayChatMessage from "../displayChatMessage.js";
+import updateMessageHistory from '/src/updateMessageHistory.js';
+import apiFetch from '/src/apiFetch.js';
+import displayChatMessage from "/src/displayChatMessage.js";
 
 const app = () => {
   // Query Selectors
