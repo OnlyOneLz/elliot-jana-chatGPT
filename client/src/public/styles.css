@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Croissant+One&family=Kanit:wght@200;500&family=Kumar+One&family=Oswald:wght@200&family=Rubik+Iso&family=Titillium+Web:wght@200&family=Victor+Mono:wght@100&family=Young+Serif&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Croissant+One&family=Kanit:wght@200;500&family=Kumar+One&family=Oswald:wght@200&family=Rubik+Iso&family=Titillium+Web:wght@200&family=Victor+Mono:wght@100&family=Young+Serif&display=swap");
 
 :root {
-    --bg: #292b29;
-    --text: #fff;
-    --accent: #00aa4a;
-    --secondary: #666;
-    box-sizing: border-box;
-  }
+  --bg: #292b29;
+  --text: #fff;
+  --accent: #00aa4a;
+  --secondary: #666;
+  box-sizing: border-box;
+}
 
-  body {
-    font-size: clamp(1rem, 3vmin, 2rem);
-    margin: 0;
-    background-color: var(--bg);
-    color: var(--text);
-    height: 120vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: "Kanit";
-    font-weight: 200;
+body {
+  font-size: clamp(1rem, 3vmin, 2rem);
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  height: 120vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Kanit";
+  font-weight: 200;
 }
 
 h1 {
@@ -38,12 +38,12 @@ button {
 }
 
 #chat-messages {
-    width: 80%;
-    max-height: 70vh;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2vh 2vw 0 2vw;
+  width: 80%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2vh 2vw 0 2vw;
 }
 
 .message {
@@ -53,52 +53,54 @@ button {
   line-height: 1.2;
 }
 
-.message p, .message h2 {
+.message p,
+.message h2 {
   margin: 0;
 }
 
 .question {
-    align-items: flex-end;
+  align-items: flex-end;
 }
 
 .message h2 {
-    font-size: inherit;
-    font-weight: 500;
+  font-size: inherit;
+  font-weight: 500;
 }
 
 h2.answer {
-  color: var(--accent)
+  color: var(--accent);
 }
 
 .chat-form {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    bottom: 6%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  right: 7%;
+  bottom: 6%;
 }
 
 .input-submit {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
 }
 input {
-    width: 70vw;
-    padding: .75rem;
-    border-radius: 15px;
-    border: 0;
-    flex-grow: 1;
+  width: 70vw;
+  padding: 0.75rem;
+  border-radius: 15px;
+  border: 0;
+  flex-grow: 1;
 }
 
-button[type=submit] {
+button[type="submit"] {
   position: relative;
   top: 0.25rem;
   left: -2.5rem;
   width: 2rem;
   height: 2rem;
-  background-image: url('../assets/images-removebg-preview.png');
+  background-image: url("../assets/images-removebg-preview.png");
   background-size: contain;
   background-repeat: no-repeat;
   border: none;
@@ -108,13 +110,13 @@ button[type=submit] {
   flex-grow: 0;
 }
 
-button[type=submit]:hover {
+button[type="submit"]:hover {
   background-color: #292b2948;
 }
 
 .chat-label {
-    font-size: 3vmin;
-    font-family: "Kanit";
+  font-size: 3vmin;
+  font-family: "Kanit";
 }
 
 #clear {
@@ -133,9 +135,64 @@ button[type=submit]:hover {
 
 #clear:hover {
   color: var(--text);
-  border-color: var(--text)
+  border-color: var(--text);
 }
 
+/* Side Bar */
+
+.container {
+  display: flex;
+  height: 100%;
+  margin-top: -11vh;
+}
+
+.action-bar {
+  width: 26%;
+  margin-left: -12vw;
+  background-color: rgba(18, 18, 18, 0.767);
+  flex: 0 0 auto;
+}
+
+.chat-window {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Style chat links */
+.action-bar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px;
+  width: 90%;
+  text-align: center;
+}
+
+.action-bar li {
+  padding-bottom: 1px;
+}
+
+.action-bar a {
+  display: block;
+  padding: 0px;
+  text-decoration: none;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 15px;
+}
+
+.action-bar a:hover {
+  background-color: #ddd;
+}
+
+.chat-title {
+  margin: 5vh 0 -0.5vh 1vw;
+  font-size: 2vmin;
+  font-family: "Kanit";
+}
+.new-chat {
+  margin-left: 5vw;
+  font-size: 2.5vmin;
+}
 
 @media (width > 500px) {
   #chat-messages {

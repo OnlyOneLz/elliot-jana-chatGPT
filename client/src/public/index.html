@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>ChatGPT Clone</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-
-<body>
-  <header>
-    <h1>ChatGPT <span>3.5</span></h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ChatGPT Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
   <body>
-    <button id="clear">clear chat</button>
-    <div id="chat-messages"></div>
-    <form class="chat-form">
-      <label class="chat-label" for="chat-input">Ask Away...</label>
-      <div class="input-submit">
-        <input type="text" id="chat-input">
-        <button type="submit"></button>
+    <header>
+      <h1>ChatGPT <span>3.5</span></h1>
+    </header>
+
+    <body>
+      <div class="container">
+        <aside class="action-bar">
+          <p class="new-chat"><span></span>New chat</h2>
+          <p class="chat-title">Recent</p>
+          <ul>
+            <li><a href="#">Chat 1</a></li>
+            <li><a href="#">Chat 2</a></li>
+            <li><a href="#">Chat 3</a></li>
+          </ul>
+        </aside>
+        <main class="chat-window">
+          <button id="clear">clear chat</button>
+          <div id="chat-messages"></div>
+          <form class="chat-form">
+            <label class="chat-label" for="chat-input">Ask Away...</label>
+            <div class="input-submit">
+              <input type="text" id="chat-input" />
+              <button type="submit"></button>
+            </div>
+          </form>
+        </main>
       </div>
-    </form>
+    </body>
+    <script src="script.js" type="module"></script>
+    <!-- <script src="../tests/displayChatMessageTest.js" type="module"></script> -->
+    <!-- <script src="../tests/apiFetchTest.js" type="module"></script> -->
+    <!-- <script src="../tests/updateMessageHistoryTest.js" type="module"></script> -->
   </body>
-  <script src="script.js" type="module"></script>
-  <!-- <script src="../tests/displayChatMessageTest.js" type="module"></script> -->
-  <!-- <script src="../tests/apiFetchTest.js" type="module"></script> -->
-  <!-- <script src="../tests/updateMessageHistoryTest.js" type="module"></script> -->
-</body>
+</html>
