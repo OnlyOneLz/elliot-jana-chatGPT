@@ -176,6 +176,17 @@ app.get("/messages", async (req, res) => {
   }
 });
 
+app.get("/messages/:id", async (req, res) => {
+  try {
+    const messages = await MessageHistory.find({
+      conversationId: req.params.id,
+    });
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // POST a new message
 app.post("/messages", async (req, res) => {
   const { role, userId, conversationId, message } = req.body;
