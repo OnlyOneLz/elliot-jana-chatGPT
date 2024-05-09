@@ -6,10 +6,6 @@ const messageHistorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userId: {
-      type: String,
-      required: false,
-    },
     conversationId: {
       type: String,
       required: true,

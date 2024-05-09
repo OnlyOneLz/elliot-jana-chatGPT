@@ -1,5 +1,4 @@
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const router = express.Router();
@@ -14,10 +13,9 @@ const app = express();
 
 app.use("/app/", router);
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-console.log(process.env.DATABASE_CONNECTION);
 
 mongoose.connect(process.env.DATABASE_CONNECTION);
 
@@ -66,7 +64,7 @@ app.post("/Api-fetch", async (req, res) => {
 // Database Fetch
 // Users
 
-router.get("/users", async (req, res) => {
+app.get("/users", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
@@ -81,7 +79,9 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.post("/users", async (req, res) => {
+app.post("/users", async (req, res) => {
+  console.log(req.body);
+  const { email, password } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -101,7 +101,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
@@ -115,7 +115,7 @@ router.delete("/users/:id", async (req, res) => {
 
 // Conversations
 
-router.get("/conversations", async (req, res) => {
+app.get("/conversations", async (req, res) => {
   try {
     const conversations = await Conversation.find();
     res.json(conversations);
@@ -124,10 +124,22 @@ router.get("/conversations", async (req, res) => {
   }
 });
 
-router.post("/conversations", async (req, res) => {
-  const { conversationName } = req.body;
+app.get("/conversations/one/:id", async (req, res) => {
+  try {
+    const conversation = await Conversation.find({
+      userId: req.params.id,
+    });
+    res.json(conversation);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.post("/conversations", async (req, res) => {
+  const { conversationName, userId } = req.body;
   const newConversation = new Conversation({
     conversationName,
+    userId,
   });
 
   try {
@@ -138,11 +150,11 @@ router.post("/conversations", async (req, res) => {
   }
 });
 
-router.delete("/conversations/:id", async (req, res) => {
+app.delete("/conversations/:id", async (req, res) => {
   try {
-    const deletedConversation = await Conversation.findByIdAndDelete(
-      req.params.id
-    );
+    const deletedConversation = await Conversation.find({
+      userId: req.params.id,
+    });
     if (!deletedConversation) {
       return res.status(404).json({ message: "Conversation not found" });
     }
@@ -155,7 +167,7 @@ router.delete("/conversations/:id", async (req, res) => {
 // Message History
 
 // GET all messages
-router.get("/messages", async (req, res) => {
+app.get("/messages", async (req, res) => {
   try {
     const messages = await MessageHistory.find();
     res.json(messages);
@@ -165,7 +177,7 @@ router.get("/messages", async (req, res) => {
 });
 
 // POST a new message
-router.post("/messages", async (req, res) => {
+app.post("/messages", async (req, res) => {
   const { role, userId, conversationId, message } = req.body;
   const newMessage = new MessageHistory({
     role,
@@ -183,7 +195,7 @@ router.post("/messages", async (req, res) => {
 });
 
 // DELETE a message
-router.delete("/messages/:id", async (req, res) => {
+app.delete("/messages/:id", async (req, res) => {
   try {
     const deletedMessage = await MessageHistory.findByIdAndDelete(
       req.params.id
