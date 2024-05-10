@@ -3,6 +3,10 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
+const session = require("express-session");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const mongoose = require("mongoose");
 const User = require("./schemas/userSchema");
 const Conversation = require("./schemas/conversationSchema");
@@ -32,6 +36,85 @@ app.listen(port, () => {
   console.log(`listening on port: ${port}`);
 });
 
+// GOOGLE API
+
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Initialize Passport.js middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Serialize user into the session
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+// Configure Google authentication strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+    },
+    async function (accessToken, refreshToken, profile, done) {
+      const email = profile.emails[0].value;
+      const password = "google";
+      try {
+        // Check if user already exists in the database
+        let user = await User.findOne({ email });
+
+        if (!user) {
+          // If user doesn't exist, create a new user
+          user = await new User({ email, password }).save();
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+          { userId: user._id },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
+
+        // Return the token along with the user profile
+        return done(null, { user, token });
+      } catch (err) {
+        // Handle errors
+        return done(err);
+      }
+    }
+  )
+);
+
+// Google authentication routes
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Redirect user to the dashboard or homepage
+    res.redirect(
+      "http://127.0.0.1:5500/client/src/public/index.html#/?token=" +
+        req.user.token
+    );
+  }
+);
 // Api Fetch
 
 app.post("/Api-fetch", async (req, res) => {
@@ -62,17 +145,58 @@ app.post("/Api-fetch", async (req, res) => {
 });
 
 // Database Fetch
+
+// Token Verification
+
+function verifyToken(req, res, next) {
+  const token = req.headers["authorization"];
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided." });
+  }
+  jwt.verify(
+    token.replace("Bearer ", ""),
+    process.env.JWT_SECRET_KEY,
+    (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Invalid token." });
+      }
+      req.userId = decoded.userId;
+      next();
+    }
+  );
+}
+
+app.get("/protected", verifyToken, (req, res) => {
+  res.json({ message: "This route is protected." });
+});
 // Users
 
-app.get("/users", async (req, res) => {
+app.post("/user/get", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
 
-    if (user.password === password) {
-      res.json(user).status(200);
+    if (!user) {
+      res
+        .status(401)
+        .json({ cause: "email", message: "No user with this email." });
     } else {
-      res.json("Incorrect password").status(401);
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (passwordMatch) {
+        const token = jwt.sign(
+          { userId: user._id },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
+        res.status(200).json({ user, token });
+      } else {
+        res
+          .status(401)
+          .json({ cause: "password", message: "Incorrect password" });
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -80,7 +204,6 @@ app.get("/users", async (req, res) => {
 });
 
 app.post("/users", async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
@@ -90,12 +213,14 @@ app.post("/users", async (req, res) => {
       password: hashedPassword,
     });
     const savedUser = await newUser.save();
-    res.status(201).json({
-      _id: savedUser._id,
-      email: savedUser.email,
-      createdAt: savedUser.createdAt,
-      updatedAt: savedUser.updatedAt,
-    });
+    const token = jwt.sign(
+      { userId: savedUser._id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+    res.status(201).json({ token: token });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Croissant+One&family=Happy+Monkey&family=Inconsolata:wght@200..900&family=Jacques+Francois+Shadow&family=Kanit:wght@500&family=Kumar+One&family=Oswald:wght@200&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Iso&family=Titillium+Web:wght@200&family=Victor+Mono:wght@100&family=Young+Serif&display=swap");
+:root {
+  --bg: #292b29;
+  --text: #fff;
+  --accent: #00aa4a;
+  --secondary: #666;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+}
+
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+#logo {
+  height: 14vh;
+  margin-top: 4vh;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: rgb(69, 64, 64);
+  margin: 16vh 0 4vh 0;
+  font-size: 32px;
+}
+
+.error {
+  font-size: 1.2vmin;
+  color: red;
+  margin: 0.5vh 0 -1vh 0.5vw;
+}
+
+.google-logo {
+  height: 4vh;
+  width: 3vw;
+  margin-right: 1.7vh;
+}
+
+#google-login {
+  font-size: 1.8vmin;
+}
+
+.input-container {
+}
+
+.input {
+  height: 6.5vh;
+  width: 22.5vw;
+}
+
+.signup-link-p {
+  margin-top: 2vh;
+  font-size: 1.8vmin;
+}
+
+.signup-link {
+  text-decoration: none;
+  color: #10a37f;
+}
+
+.divider-wrapper {
+  display: flex;
+  flex-direction: row;
+  text-transform: uppercase;
+  border: none;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  padding: 24px 0 0;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  vertical-align: baseline;
+}
+
+.divider-wrapper:before,
+.divider-wrapper:after {
+  content: "";
+  border-bottom: 1px solid #c2c8d0;
+  flex: 1 0 auto;
+  height: 0.5em;
+  margin: 0;
+}
+
+.divider {
+  text-align: center;
+  flex: 0.2 0 auto;
+  margin: 0;
+  height: 12px;
+}
+
+.input-password {
+  display: none;
+}
