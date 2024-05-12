@@ -4,13 +4,11 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const session = require("express-session");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const mongoose = require("mongoose");
 const User = require("./schemas/userSchema");
 const Conversation = require("./schemas/conversationSchema");
 const MessageHistory = require("./schemas/messageHistorySchema");
+const googleAuth = require("./google-auth/google-auth");
 require("dotenv").config();
 
 const app = express();
@@ -38,83 +36,79 @@ app.listen(port, () => {
 
 // GOOGLE API
 
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+googleAuth(app);
 
-// Initialize Passport.js middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(
+//   session({
+//     secret: process.env.JWT_SECRET_KEY,
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
-// Serialize user into the session
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
+// passport.serializeUser(function (user, done) {
+//   done(null, user);
+// });
 
-// Configure Google authentication strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
-    },
-    async function (accessToken, refreshToken, profile, done) {
-      const email = profile.emails[0].value;
-      const password = "google";
-      try {
-        // Check if user already exists in the database
-        let user = await User.findOne({ email });
+// passport.deserializeUser(function (user, done) {
+//   done(null, user);
+// });
 
-        if (!user) {
-          // If user doesn't exist, create a new user
-          user = await new User({ email, password }).save();
-        }
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: process.env.GOOGLE_CLIENT_ID,
+//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//       callbackURL: "/auth/google/callback",
+//     },
+//     async function (accessToken, refreshToken, profile, done) {
+//       const email = profile.emails[0].value;
+//       const password = "google";
+//       try {
+//         // Check if user already exists in the database
+//         let user = await User.findOne({ email });
 
-        // Generate JWT token
-        const token = jwt.sign(
-          { userId: user._id },
-          process.env.JWT_SECRET_KEY,
-          {
-            expiresIn: "1h",
-          }
-        );
+//         if (!user) {
+//           // If user doesn't exist, create a new user
+//           user = await new User({ email, password }).save();
+//         }
 
-        // Return the token along with the user profile
-        return done(null, { user, token });
-      } catch (err) {
-        // Handle errors
-        return done(err);
-      }
-    }
-  )
-);
+//         const token = jwt.sign(
+//           { userId: user._id },
+//           process.env.JWT_SECRET_KEY,
+//           {
+//             expiresIn: "1h",
+//           }
+//         );
 
-// Google authentication routes
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+//         return done(null, { user, token });
+//       } catch (err) {
+//         return done(err);
+//       }
+//     }
+//   )
+// );
 
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Redirect user to the dashboard or homepage
-    res.redirect(
-      "http://127.0.0.1:5500/client/src/public/index.html#/?token=" +
-        req.user.token
-    );
-  }
-);
+// // Google authentication routes
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] })
+// );
+
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/login" }),
+//   function (req, res) {
+//     res.redirect(
+//       "http://127.0.0.1:5500/client/src/public/index.html#/?token=" +
+//         req.user.token
+//     );
+//   }
+// );
+
 // Api Fetch
 
 app.post("/Api-fetch", async (req, res) => {
@@ -144,8 +138,6 @@ app.post("/Api-fetch", async (req, res) => {
   }
 });
 
-// Database Fetch
-
 // Token Verification
 
 function verifyToken(req, res, next) {
@@ -170,6 +162,7 @@ function verifyToken(req, res, next) {
 app.get("/protected", verifyToken, (req, res) => {
   res.json({ message: "This route is protected." });
 });
+
 // Users
 
 app.post("/user/get", async (req, res) => {

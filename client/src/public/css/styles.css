@@ -21,6 +21,12 @@ body {
   font-weight: 200;
 }
 
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 h1 {
   letter-spacing: 1px;
   margin: 0.5rem;
@@ -35,6 +41,11 @@ h1 span {
 
 button {
   font-family: inherit;
+}
+
+#logo {
+  height: 3vh;
+  /* margin-top: 4vh; */
 }
 
 #chat-messages {
@@ -148,7 +159,7 @@ button[type="submit"]:hover {
 
 .action-bar {
   width: 26%;
-  margin-left: -12vw;
+  margin-left: -11vw;
   background-color: rgba(18, 18, 18, 0.767);
   flex: 0 0 auto;
 }
@@ -168,7 +179,7 @@ button[type="submit"]:hover {
 }
 
 .action-bar li {
-  padding-bottom: 1px;
+  padding-bottom: 4px;
 }
 
 .action-bar a {
@@ -178,6 +189,7 @@ button[type="submit"]:hover {
   color: #333;
   border: 2px solid #333;
   border-radius: 15px;
+  height: 5vh;
 }
 
 .action-bar a:hover {
@@ -190,8 +202,29 @@ button[type="submit"]:hover {
   font-family: "Kanit";
 }
 .new-chat {
-  margin-left: 5vw;
-  font-size: 2.5vmin;
+  padding: 0.8vh 1vw 0.8vh 1vw;
+  margin: 1vh 1vw 0 1vw;
+  border-radius: 15px;
+  font-size: 2vmin;
+  font-family: "Kanit";
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.new-chat:hover {
+  background-color: #4a4949;
+}
+
+.new-chat-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+}
+
+#new-chat-icon {
+  height: 4vh;
 }
 
 @media (width > 500px) {

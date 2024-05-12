@@ -1,7 +1,7 @@
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
-import updateMessageHistory from "../updateMessageHistory.js";
-import apiFetch from "../apiFetch.js";
-import displayChatMessage from "../displayChatMessage.js";
+import updateMessageHistory from "../../updateMessageHistory.js";
+import apiFetch from "./apiFetch.js";
+import displayChatMessage from "./displayChatMessage.js";
 
 const app = () => {
   // Query Selectors
@@ -9,6 +9,18 @@ const app = () => {
   const formInput = document.getElementById("chat-input");
   const messagesDiv = document.querySelector("#chat-messages");
   const clearButton = document.getElementById("clear");
+
+  const hash = window.location.hash;
+  const token = hash.split("=")[1];
+
+  console.log(token);
+
+  if (token) {
+    console.log("hello");
+    localStorage.setItem("token", token);
+  }
+
+  console.log(paramValue);
 
   // state
   let messageHistory = localStorage.getItem("history")
