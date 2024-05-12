@@ -38,77 +38,6 @@ app.listen(port, () => {
 
 googleAuth(app);
 
-// app.use(
-//   session({
-//     secret: process.env.JWT_SECRET_KEY,
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// passport.serializeUser(function (user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function (user, done) {
-//   done(null, user);
-// });
-
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "/auth/google/callback",
-//     },
-//     async function (accessToken, refreshToken, profile, done) {
-//       const email = profile.emails[0].value;
-//       const password = "google";
-//       try {
-//         // Check if user already exists in the database
-//         let user = await User.findOne({ email });
-
-//         if (!user) {
-//           // If user doesn't exist, create a new user
-//           user = await new User({ email, password }).save();
-//         }
-
-//         const token = jwt.sign(
-//           { userId: user._id },
-//           process.env.JWT_SECRET_KEY,
-//           {
-//             expiresIn: "1h",
-//           }
-//         );
-
-//         return done(null, { user, token });
-//       } catch (err) {
-//         return done(err);
-//       }
-//     }
-//   )
-// );
-
-// // Google authentication routes
-// app.get(
-//   "/auth/google",
-//   passport.authenticate("google", { scope: ["profile", "email"] })
-// );
-
-// app.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/login" }),
-//   function (req, res) {
-//     res.redirect(
-//       "http://127.0.0.1:5500/client/src/public/index.html#/?token=" +
-//         req.user.token
-//     );
-//   }
-// );
-
 // Api Fetch
 
 app.post("/Api-fetch", async (req, res) => {
@@ -160,7 +89,7 @@ function verifyToken(req, res, next) {
 }
 
 app.get("/protected", verifyToken, (req, res) => {
-  res.json({ message: "This route is protected." });
+  res.json({ message: "This route is protected.", userId: req.userId });
 });
 
 // Users
@@ -242,12 +171,24 @@ app.get("/conversations", async (req, res) => {
   }
 });
 
+app.get("/conversations/user/:id", verifyToken, async (req, res) => {
+  try {
+    const conversations = await Conversation.find({
+      userId: req.params.id,
+    }).sort({ createdAt: -1 });
+    res.json(conversations);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.get("/conversations/one/:id", async (req, res) => {
   try {
-    const conversation = await Conversation.find({
-      userId: req.params.id,
+    const conversation = await Conversation.findById(req.params.id);
+    const messages = await MessageHistory.find({
+      conversationId: req.params.id,
     });
-    res.json(conversation);
+    res.json({ conversation: conversation, messages: messages });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -326,13 +267,16 @@ app.post("/messages", async (req, res) => {
 // DELETE a message
 app.delete("/messages/:id", async (req, res) => {
   try {
-    const deletedMessage = await MessageHistory.findByIdAndDelete(
-      req.params.id
-    );
-    if (!deletedMessage) {
-      return res.status(404).json({ message: "Message not found" });
+    const deletedMessages = await MessageHistory.deleteMany({
+      conversationId: req.params.id,
+    });
+    if (deletedMessages.deletedCount === 0) {
+      return res.status(404).json({ message: "Messages not found" });
     }
-    res.json({ message: "Message deleted" });
+    res.json({
+      message: "Messages deleted",
+      count: deletedMessages.deletedCount,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

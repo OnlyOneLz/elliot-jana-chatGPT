@@ -169,35 +169,33 @@ button[type="submit"]:hover {
   padding: 20px;
 }
 
-/* Style chat links */
 .action-bar ul {
   list-style-type: none;
-  padding: 0;
+  padding: 0 0 0 0.3vw;
   margin: 10px;
   width: 90%;
   text-align: center;
 }
 
-.action-bar li {
-  padding-bottom: 4px;
-}
-
-.action-bar a {
+.action-bar-li {
   display: block;
-  padding: 0px;
-  text-decoration: none;
-  color: #333;
-  border: 2px solid #333;
+  color: #ffffff;
+  /* border: 2px solid #333; */
   border-radius: 15px;
-  height: 5vh;
+  height: 3.5vh;
+  font-size: 2vmin;
+  font-family: "Kanit";
+  text-align: left;
+  padding: 1vh 1vw 1vh 1vw;
+  margin-bottom: 0.5vh;
 }
 
-.action-bar a:hover {
-  background-color: #ddd;
+.action-bar-li:hover {
+  background-color: #424242;
 }
 
 .chat-title {
-  margin: 5vh 0 -0.5vh 1vw;
+  margin: 5vh 0 -0.5vh 2vw;
   font-size: 2vmin;
   font-family: "Kanit";
 }

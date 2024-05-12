@@ -70,7 +70,7 @@ const googleAuth = (app) => {
     passport.authenticate("google", { failureRedirect: "/login" }),
     function (req, res) {
       res.redirect(
-        "http://127.0.0.1:5500/client/src/public/gtml/index.html#/?token=" +
+        "http://127.0.0.1:5500/client/src/html/index.html#/?token=" +
           req.user.token
       );
     }

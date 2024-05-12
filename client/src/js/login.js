@@ -20,7 +20,7 @@ const app = () => {
     console.log(validEmail, validToken);
     if (validEmail && validToken) {
       window.location.href =
-        "http://127.0.0.1:5500/client/src/public/index.html#";
+        "http://127.0.0.1:5500/client/src/html/index.html#";
     }
   };
 
