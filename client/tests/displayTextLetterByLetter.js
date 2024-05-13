@@ -38,6 +38,6 @@ const messages = document.getElementById("chat-messages")
 
 const thisMessage = document.createElement("div");
 console.log(thisMessage)
-thisMessage.classList.add("message");
+thisMessage.classList.add("message","answer");
 messages.appendChild(thisMessage)
 displayTextLetterByLetter(content,thisMessage,"answer")
