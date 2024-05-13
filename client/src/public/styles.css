@@ -53,6 +53,14 @@ button {
   line-height: 1.2;
 }
 
+.message.answer * {
+  visibility: hidden;
+}
+
+.message.answer .visible {
+  visibility: visible;
+}
+
 .message p,
 .message h2 {
   margin: 0;
