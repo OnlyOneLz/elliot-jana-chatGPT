@@ -42,16 +42,13 @@ body {
 }
 
 .google-logo {
-  height: 4vh;
-  width: 3vw;
+  height: 3vh;
+  width: 2vw;
   margin: 0 2vw 0 -4vw;
 }
 
 #google-login {
   font-size: 2vmin;
-}
-
-.input-container {
 }
 
 .input {

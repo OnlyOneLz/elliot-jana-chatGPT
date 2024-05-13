@@ -141,7 +141,7 @@ const app = () => {
   signUp.addEventListener("click", async function () {
     if (signUpP.classList.contains("login")) {
       signUpP.innerHTML = "Dont have an account?  ";
-      signUpP.appendChild(signUp).innerHTML = "Signup";
+      signUpP.appendChild(signUp).innerHTML = "Sign up";
       signUpP.classList.remove("login");
       loginTitle.innerHTML = "Welcome back";
       passwordInputContainer.style.display = "none";
@@ -151,7 +151,7 @@ const app = () => {
       signUpP.classList.add("login");
       passwordInput.disabled = false;
       passwordInputContainer.style.display = "block";
-      loginTitle.innerHTML = "Signup";
+      loginTitle.innerHTML = "Create an account";
     }
   });
 };
