@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
 
-  <body>
-    <header>
-      <h1>ChatGPT <span>3.5</span></h1>
-    </header>
-
     <body>
       <div class="container">
         <aside class="action-bar">
@@ -19,8 +14,12 @@
           <p class="chat-title roboto-bold">Recent</p>
           <ul id="ul-chats">
           </ul>
+          <button id="logout-btn"><span id="logout-text"><img src="../assets/dummy-removebg-preview copy 4.png" id="logout-img">Log out</span></button>
         </aside>
         <main class="chat-window">
+          <header class='header-title'>
+            <h1>ChatGPT <span>3.5</span></h1>
+          </header>
           <button id="clear">clear chat</button>
           <div id="chat-messages"></div>
           <form class="chat-form">
@@ -32,7 +31,6 @@
           </form>
         </main>
       </div>
-    </body>
     <script src="../js/script.js" type="module"></script>
   </body>
 </html>

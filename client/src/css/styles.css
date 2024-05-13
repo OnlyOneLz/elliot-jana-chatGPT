@@ -9,16 +9,22 @@
 }
 
 body {
-  font-size: clamp(1rem, 3vmin, 2rem);
+  font-size: 2.5vmin;
   margin: 0;
   background-color: var(--bg);
   color: var(--text);
-  height: 120vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: "Kanit";
   font-weight: 200;
+  height: 100vh;
+  width: 100vw;
+}
+
+.header-title {
+  font-size: 1.25vmin;
+  margin-top: -1.5vh;
 }
 
 .roboto-bold {
@@ -48,13 +54,20 @@ button {
   /* margin-top: 4vh; */
 }
 
+.chat-window {
+  position: relative;
+}
+
 #chat-messages {
+  max-height:100%;
+  overflow:auto;
+  /* margin-top: 10vh; */
   width: 80%;
   max-height: 70vh;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 2vh 2vw 0 2vw;
+  padding: 2vh 2vw 2vw 3vw;
 }
 
 .message {
@@ -74,8 +87,8 @@ button {
 }
 
 .message h2 {
-  font-size: inherit;
-  font-weight: 500;
+  font-size: 2vmin;
+  font-weight: 400'
 }
 
 h2.answer {
@@ -153,13 +166,12 @@ button[type="submit"]:hover {
 
 .container {
   display: flex;
-  height: 100%;
-  margin-top: -11vh;
+  height: 100vh;
+  width: 100%;
 }
 
 .action-bar {
-  width: 26%;
-  margin-left: -11vw;
+  width: 20%;
   background-color: rgba(18, 18, 18, 0.767);
   flex: 0 0 auto;
 }
@@ -180,7 +192,6 @@ button[type="submit"]:hover {
 .action-bar-li {
   display: block;
   color: #ffffff;
-  /* border: 2px solid #333; */
   border-radius: 15px;
   height: 3.5vh;
   font-size: 2vmin;
@@ -191,7 +202,7 @@ button[type="submit"]:hover {
 }
 
 .action-bar-li:hover {
-  background-color: #424242;
+  background-color: #323232;
 }
 
 .chat-title {
@@ -211,7 +222,7 @@ button[type="submit"]:hover {
 }
 
 .new-chat:hover {
-  background-color: #4a4949;
+  background-color: #212121;
 }
 
 .new-chat-1 {
@@ -223,6 +234,36 @@ button[type="submit"]:hover {
 
 #new-chat-icon {
   height: 4vh;
+}
+
+#logout-btn {
+  position: fixed;
+  bottom: 2%;
+  height: 6vh;
+  width: 17.5%;
+  border: 0px;
+  background-color: rgba(18, 18, 18, 0.767);
+  font-size: 2vmin;
+  font-family: "Kanit";
+  text-align: left;
+  padding: 1vh 1vw 1vh 1vw;
+  margin: 0 0 0 1vw;
+  border-radius: 10px;
+  color: white;
+}
+
+#logout-btn:hover {
+  background-color: #323232;
+}
+
+#logout-text {
+  display: flex;
+  justify-content: left;
+  gap: 2vw;
+}
+#logout-img {
+  margin-left: 0.4vw;
+  height: 3vh;
 }
 
 @media (width > 500px) {

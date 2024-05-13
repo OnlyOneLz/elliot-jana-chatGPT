@@ -15,9 +15,12 @@ const app = async () => {
   const clearButton = document.getElementById("clear");
   const actionBarUl = document.getElementById("ul-chats");
   const newChatBtn = document.querySelector(".new-chat");
+  const logoutBtn = document.getElementById("logout-btn");
 
   const hash = window.location.hash;
-  const token = hash.split("=")[1];
+  const token = hash.split("=")[1]
+    ? hash.split("=")[1]
+    : localStorage.getItem("token");
 
   const userId = await getUser(token);
 
@@ -27,6 +30,7 @@ const app = async () => {
   // Statements
 
   if (token) {
+    console.log("hello");
     localStorage.setItem("token", token);
   }
 
@@ -94,7 +98,7 @@ const app = async () => {
       if (response.status === 401) {
         window.location.href =
           "http://127.0.0.1:5500/client/src/html/login.html#";
-      } else {
+      } else if (data.length > 0) {
         data.map((chat) => {
           const chats = document.createElement("li");
           chats.classList.add(`action-bar-li`);
@@ -181,6 +185,13 @@ const app = async () => {
     formInput.placeholder = "Enter chat name ";
   });
 
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("conservationId");
+    localStorage.removeItem("history");
+    window.location.href = "http://127.0.0.1:5500/client/src/html/login.html#";
+  });
+
   document.addEventListener("click", (event) => {
     conversationId = localStorage.getItem("conversationId");
     if (conversationId) {
@@ -188,7 +199,7 @@ const app = async () => {
         `${conversationId}`
       );
       console.log(conversationHighlight, "hello");
-      conversationHighlight.style.backgroundColor = "rgba(18, 18, 18, 0.767)";
+      conversationHighlight.style.backgroundColor = "";
     }
     if (event.target.classList.contains("action-bar-li")) {
       clearChat();

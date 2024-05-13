@@ -133,7 +133,7 @@ const app = () => {
       if (response.ok) {
         localStorage.setItem("token", data.value);
         window.location.href =
-          "http://127.0.0.1:5500/client/src/public/index.html#";
+          "http://127.0.0.1:5500/client/src/html/index.html#";
       }
     } catch (error) {
       console.error("Error verifying token:", error);
@@ -160,12 +160,15 @@ const app = () => {
       signUpP.innerHTML = "Dont have an account?  ";
       signUpP.appendChild(signUp).innerHTML = "Signup";
       signUpP.classList.remove("login");
+      loginTitle.innerHTML = "Welcome back";
+      passwordInputContainer.style.display = "none";
     } else {
       signUpP.innerHTML = "Already have an account with us?  ";
       signUpP.appendChild(signUp).innerHTML = "Login";
       signUpP.classList.add("login");
       passwordInput.disabled = false;
       passwordInputContainer.style.display = "block";
+      loginTitle.innerHTML = "Signup";
     }
   });
 };
