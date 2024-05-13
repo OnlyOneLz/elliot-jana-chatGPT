@@ -190,7 +190,7 @@ button[type="submit"]:hover {
 }
 
 .action-bar-li {
-  display: block;
+  display: flex;
   color: #ffffff;
   border-radius: 15px;
   height: 3.5vh;
@@ -199,6 +199,7 @@ button[type="submit"]:hover {
   text-align: left;
   padding: 1vh 1vw 1vh 1vw;
   margin-bottom: 0.5vh;
+  justify-content: space-between;
 }
 
 .action-bar-li:hover {
@@ -264,6 +265,17 @@ button[type="submit"]:hover {
 #logout-img {
   margin-left: 0.4vw;
   height: 3vh;
+}
+
+.bin-btn {
+  height: 2.5vh;
+  padding: 5px;
+  /* border: 2px black solid; */
+  border-radius: 5px;
+}
+
+.bin-btn:hover {
+  background-color: rgba(18, 18, 18, 0.767);
 }
 
 @media (width > 500px) {

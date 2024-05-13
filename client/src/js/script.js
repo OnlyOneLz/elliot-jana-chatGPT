@@ -108,6 +108,10 @@ const app = async () => {
           chats.id = `${chat._id}`;
           chats.innerHTML = `${chat.conversationName}`;
           actionBarUl.appendChild(chats);
+          const binImg = document.createElement("img");
+          binImg.src = "../assets/dummy-removebg-preview copy 5.png";
+          binImg.classList.add("bin-btn");
+          chats.appendChild(binImg);
         });
         if (!conversationId) {
           clearChat();
@@ -138,6 +142,41 @@ const app = async () => {
         }
       );
       const data = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteConversationWithMesssages = async (conversationId) => {
+    const messageHistory = localStorage.getItem("history");
+    console.log(messageHistory);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/conversations/${conversationId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response) {
+        console.log("Deleted conversation");
+      }
+      if (messageHistory.length > 0) {
+        const response2 = await fetch(
+          `http://localhost:4000/messages/${conversationId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response2) {
+          console.log("Deleted Messages");
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -185,19 +224,25 @@ const app = async () => {
     window.location.href = "http://127.0.0.1:5500/client/src/html/login.html#";
   });
 
+  const deleteBtn = document.querySelector(".bin-btn");
+
+  deleteBtn.addEventListener("click", () => {
+    const conversationId = localStorage.getItem("conversationId");
+    console.log(conversationId);
+    deleteConversationWithMesssages(conversationId);
+  });
+
   document.addEventListener("click", (event) => {
     conversationId = localStorage.getItem("conversationId");
     if (conversationId) {
       const conversationHighlight = document.getElementById(
         `${conversationId}`
       );
-      console.log(conversationHighlight, "hello");
       conversationHighlight.style.backgroundColor = "";
     }
     if (event.target.classList.contains("action-bar-li")) {
       clearChat();
       const chatId = event.target.id;
-      console.log("Clicked chat ID:", chatId);
       fetchMessages(chatId);
       localStorage.setItem("conversationId", chatId);
       const conversationHighlight = document.getElementById(`${chatId}`);

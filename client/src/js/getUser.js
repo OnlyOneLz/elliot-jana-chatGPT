@@ -8,7 +8,6 @@ export const apiFetch = async (token) => {
       },
     });
     const data = await response.json();
-    console.log(data);
     return data.userId;
   } catch (error) {
     console.error("Error adding message", error);
