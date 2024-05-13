@@ -4,14 +4,14 @@ const displayChatMessage = (content, role, messagesDiv) => {
   const thisMessage = document.createElement("div");
   thisMessage.classList.add(role, "message");
 
-  const messageTitle = document.createElement("h2")
+  const messageTitle = document.createElement("h2");
   messageTitle.classList.add(role);
-  const messageText = document.createElement("p")
+  const messageText = document.createElement("p");
 
-  if (role === 'question') {
-    messageTitle.innerHTML = 'You'
+  if (role === "question") {
+    messageTitle.innerHTML = "You";
   } else {
-    messageTitle.innerHTML = 'Chat GPT'
+    messageTitle.innerHTML = "Chat GPT";
   }
 
   displayTextLetterByLetter(content, messageText, role);
@@ -19,6 +19,6 @@ const displayChatMessage = (content, role, messagesDiv) => {
   thisMessage.appendChild(messageText);
 
   messagesDiv.appendChild(thisMessage);
-}
+};
 
-export default displayChatMessage
+export default displayChatMessage;
