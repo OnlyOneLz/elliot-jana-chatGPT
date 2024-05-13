@@ -9,15 +9,11 @@ const app = () => {
   const signUpP = document.querySelector(".signup-link-p");
   const signUp = document.querySelector(".signup-link");
 
-  // Variables
-
   // Functions
 
   const checkEmail = async () => {
     const validEmail = await fetchUser(emailInput.value, "password");
     const validToken = await checkAuthentication();
-
-    console.log(validEmail, validToken);
     if (validEmail && validToken) {
       window.location.href =
         "http://127.0.0.1:5500/client/src/html/index.html#";
@@ -26,16 +22,10 @@ const app = () => {
 
   async function checkAuthentication() {
     const isAuthenticated = await checkTokenValidity();
-    if (isAuthenticated) {
-      console.log("User is authenticated");
-      return true;
-    } else {
-      console.log("User is not authenticated");
-      return false;
-    }
+    return isAuthenticated;
   }
 
-  // Requests
+  // API Calls
 
   const fetchUser = async (email, password) => {
     try {
@@ -85,10 +75,6 @@ const app = () => {
 
   async function checkTokenValidity() {
     const token = localStorage.getItem("token");
-    console.log(token);
-    // if (!token) {
-    //   return false;
-    // }
 
     try {
       const response = await fetch("http://localhost:4000/protected", {
@@ -98,12 +84,9 @@ const app = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
       if (response.ok) {
-        console.log(response);
         return true;
       } else {
-        console.log(response);
         localStorage.removeItem("token");
         return false;
       }

@@ -17,24 +17,19 @@ const app = async () => {
   const newChatBtn = document.querySelector(".new-chat");
   const logoutBtn = document.getElementById("logout-btn");
 
+  // Get Token
   const hash = window.location.hash;
   const token = hash.split("=")[1]
     ? hash.split("=")[1]
     : localStorage.getItem("token");
+  localStorage.setItem("token", token);
 
+  // Variables
   const userId = await getUser(token);
-
   let firstTitle = false;
   let conversationId = false;
 
-  // Statements
-
-  if (token) {
-    console.log("hello");
-    localStorage.setItem("token", token);
-  }
-
-  // state
+  // State
   let messageHistory = localStorage.getItem("history")
     ? JSON.parse(localStorage.getItem("history"))
     : [];
@@ -48,6 +43,16 @@ const app = async () => {
     formInput.value = "";
     chatLabel.innerHTML = "Ask Away...";
   };
+
+  const createNewChat = async (query) => {
+    const messageTitle = query;
+    createConversation(userId, messageTitle);
+    firstTitle = false;
+    formInput.min = 0;
+    clearChat();
+  };
+
+  // API Calls
 
   const fetchMessages = async (chatId) => {
     try {
@@ -75,7 +80,6 @@ const app = async () => {
           messagesDiv
         );
       });
-      console.log(data);
     } catch (error) {
       console.error("Error adding message", error);
     }
@@ -94,7 +98,6 @@ const app = async () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       if (response.status === 401) {
         window.location.href =
           "http://127.0.0.1:5500/client/src/html/login.html#";
@@ -135,22 +138,12 @@ const app = async () => {
         }
       );
       const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   await getChats();
-
-  const createNewChat = async (query) => {
-    const messageTitle = query;
-    console.log(userId);
-    createConversation(userId, messageTitle);
-    firstTitle = false;
-    formInput.min = 0;
-    clearChat();
-  };
 
   // Event Listeners
   form.addEventListener("submit", async function (event) {

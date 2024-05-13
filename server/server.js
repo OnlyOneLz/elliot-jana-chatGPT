@@ -56,7 +56,6 @@ app.post("/Api-fetch", async (req, res) => {
       }),
     });
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       res.json(data);
     } else {
@@ -210,6 +209,20 @@ app.post("/conversations", async (req, res) => {
 });
 
 app.delete("/conversations/:id", async (req, res) => {
+  try {
+    const deletedConversation = await Conversation.findByIdAndDelete(
+      req.params.id
+    );
+    if (!deletedConversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+    res.json({ message: "Conversation deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete("/conversations/all/:id", async (req, res) => {
   try {
     const deletedConversation = await Conversation.find({
       userId: req.params.id,
