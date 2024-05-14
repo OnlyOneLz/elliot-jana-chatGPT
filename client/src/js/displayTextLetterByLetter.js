@@ -1,78 +1,53 @@
 async function displayTextLetterByLetter(text, element, role) {
-  // attach the text
-  element.innerHTML = text;
-  // return early for question; it doesn't need to be animated
-  if (role === "question") { return }
+  if (role === "question") {
+    element.innerHTML = text;
+    return;
+  }
 
-  const nodes = element.childNodes
-  const delay = 20
+  // Attach the text to a temporary container so we can extract the nodes
+  const temporaryDiv = document.createElement("div");
+  temporaryDiv.style.display = "none";
+  temporaryDiv.innerHTML = text;
 
-  // start animating the child nodes sequentially and return a promise
-  return animateNodesRecursively(nodes, 0, delay);
+  // Recursively animate each node
+  await animateNodes(temporaryDiv.childNodes, element);
+
+  temporaryDiv.parentNode.removeChild(temporaryDiv);
 }
 
-function animateNodesRecursively(nodes, index, delay) {
-  // Return a promise that resolves when all nodes are animated
-  return new Promise((resolve, _) => {
-    if (index >= nodes.length) {
-      resolve(); // if all nodes are done, resolve and return.
-      return;
-    }
-    // otherwise, animate the current node
-    animateSingleNode(nodes[index], delay).then(() => {
-      // after one node resolves, recursively call this function for the next in the list
-      animateNodesRecursively(nodes, index + 1, delay).then(() => {
-        resolve(); // Resolve the promise when all nodes are animated
-      });
-    });
-  });
+async function animateNodes(nodes, parentElement) {
+  for (const node of nodes) {
+    await animateNode(node, parentElement);
+  }
 }
 
-function animateSingleNode(node, delay) {
-  return new Promise((resolve, _) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      animateTextNode(node, delay).then(() => {
-        resolve(); // Resolve the promise when the text node is animated
-      });
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      // Handle element nodes
-      animateElementNode(node, delay).then(() => {
-        resolve(); // Resolve the promise when the element node is animated
-      });
-    } else {
-      resolve(); // Resolve for other node types
-    }
-  });
+async function animateNode(node, parentElement) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    await animateTextNode(node, parentElement);
+  } else {
+    const newNode = node.cloneNode(false);
+    parentElement.appendChild(newNode);
+    await animateNodes(node.childNodes, newNode);
+  }
 }
 
-function animateTextNode(node, delay) {
-  return new Promise((resolve, _) => {
-    const text = node.textContent.trim(); // Get text content
-    node.textContent = ""; // Clear the text content
+async function animateTextNode(node, parentElement) {
+  const textNode = document.createTextNode("");
+  parentElement.appendChild(textNode);
 
-    let i = 0;
-    const interval = setInterval(() => {
-      node.textContent += text.charAt(i); // Append each character
-      i++;
-
-      // Check if we have reached the end of the text
-      if (i >= text.length) {
-        clearInterval(interval);
-        resolve(); // Resolve the promise when the text is fully animated
+  return new Promise((resolve) => {
+    let index = 0;
+    const text = node.textContent;
+    const intervalId = setInterval(() => {
+      if (index < text.length) {
+        textNode.textContent += text[index];
+        index++;
+      } else {
+        clearInterval(intervalId);
+        resolve();
       }
-    }, delay);
+    }, 20); // Adjust the interval as needed for desired speed
   });
 }
 
-
-function animateElementNode(node, delay) {
-  return new Promise((resolve, _) => {
-    node.classList.add("visible")
-    // Animate child nodes of the element
-    animateNodesRecursively(node.childNodes, 0, delay).then(() => {
-      resolve(); // Resolve the promise when all child nodes are animated
-    });
-  });
-}
-
-export default displayTextLetterByLetter
+export default displayTextLetterByLetter;
