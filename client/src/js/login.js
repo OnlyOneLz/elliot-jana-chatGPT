@@ -9,8 +9,6 @@ const app = () => {
   const signUpP = document.querySelector(".signup-link-p");
   const signUp = document.querySelector(".signup-link");
 
-  const BASE_URL = "http://localhost:4000"
-
   // Functions
 
   const checkEmail = async () => {
@@ -18,7 +16,7 @@ const app = () => {
     const validToken = await checkAuthentication();
     if (validEmail && validToken) {
       window.location.href =
-        BASE_URL;
+        "/";
     }
   };
 
@@ -31,7 +29,7 @@ const app = () => {
 
   const fetchUser = async (email, password) => {
     try {
-      const response = await fetch(BASE_URL + "/user/get", {
+      const response = await fetch("/user/get", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +77,7 @@ const app = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(BASE_URL + "/protected", {
+      const response = await fetch("/protected", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -99,12 +97,12 @@ const app = () => {
   }
 
   const startGoogleFlow = async () => {
-    window.location.href = BASE_URL + "/auth/google";
+    window.location.href = "/auth/google";
   };
 
   const newSignup = async () => {
     try {
-      const response = await fetch(BASE_URL + "/users", {
+      const response = await fetch("/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,8 +115,7 @@ const app = () => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("token", data.value);
-        window.location.href =
-          BASE_URL;
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Error verifying token:", error);
