@@ -60,7 +60,9 @@ const app = async () => {
 
   const createNewChat = async (query) => {
     const messageTitle = query;
-    createConversation(userId, messageTitle);
+    createConversation(userId, messageTitle, getChats);
+    loading = false;
+    setLoading(loading);
     firstTitle = false;
     formInput.min = 0;
     clearChat();
