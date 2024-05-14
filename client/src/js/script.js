@@ -244,7 +244,7 @@ const app = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("conversationId");
     localStorage.removeItem("history");
-    window.location.href = "http://127.0.0.1:5500/client/src/html/login.html#";
+    window.location.href = "http://localhost:4000/login";
   });
 
   document.addEventListener("click", (event) => {
