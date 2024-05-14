@@ -16,6 +16,7 @@ const app = async () => {
   const actionBarUl = document.getElementById("ul-chats");
   const newChatBtn = document.querySelector(".new-chat");
   const logoutBtn = document.getElementById("logout-btn");
+  const submitBtn = document.getElementById("submit-btn");
 
   // Get Token
   const hash = window.location.hash;
@@ -28,6 +29,7 @@ const app = async () => {
   const userId = await getUser(token);
   let firstTitle = false;
   let conversationId = false;
+  let loading = false;
 
   // State
   let messageHistory = localStorage.getItem("history")
@@ -35,6 +37,18 @@ const app = async () => {
     : [];
 
   // Functions
+  const setLoading = (loading) => {
+    const spinner = submitBtn.querySelector(".spinner");
+
+    if (loading) {
+      submitBtn.style.backgroundImage = "none";
+      spinner.style.display = "inline-block"; // Show spinner
+    } else {
+      submitBtn.style.backgroundImage =
+        'url("../assets/images-removebg-preview.png")';
+      spinner.style.display = "none"; // Hide spinner
+    }
+  };
 
   const clearChat = async () => {
     messageHistory = [];
@@ -53,7 +67,6 @@ const app = async () => {
   };
 
   // API Calls
-
   const fetchMessages = async (chatId) => {
     try {
       const response = await fetch(
@@ -66,7 +79,7 @@ const app = async () => {
         }
       );
       const data = await response.json();
-      data.messages.map((message) => {
+      data.messages.forEach((message) => {
         updateMessageHistory(
           message.message,
           message.role === "question" ? "user" : "assistant",
@@ -102,7 +115,7 @@ const app = async () => {
         window.location.href =
           "http://127.0.0.1:5500/client/src/html/login.html#";
       } else if (data.length > 0) {
-        data.map((chat) => {
+        data.forEach((chat) => {
           const chats = document.createElement("li");
           chats.classList.add(`action-bar-li`);
           chats.id = `${chat._id}`;
@@ -132,24 +145,18 @@ const app = async () => {
   const deleteMessages = async () => {
     const conversationId = localStorage.getItem("conversationId");
     try {
-      const response = await fetch(
-        `http://localhost:4000/messages/${conversationId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
+      await fetch(`http://localhost:4000/messages/${conversationId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   const deleteConversationWithMesssages = async (conversationId) => {
-    const messageHistory = localStorage.getItem("history");
-    console.log(messageHistory);
     try {
       const response = await fetch(
         `http://localhost:4000/conversations/${conversationId}`,
@@ -160,10 +167,11 @@ const app = async () => {
           },
         }
       );
-      if (response) {
+      if (response.ok) {
         console.log("Deleted conversation");
       }
-      if (messageHistory.length > 0) {
+      const messageHistory = localStorage.getItem("history");
+      if (messageHistory && messageHistory.length > 0) {
         const response2 = await fetch(
           `http://localhost:4000/messages/${conversationId}`,
           {
@@ -173,7 +181,7 @@ const app = async () => {
             },
           }
         );
-        if (response2) {
+        if (response2.ok) {
           console.log("Deleted Messages");
         }
       }
@@ -187,19 +195,33 @@ const app = async () => {
   // Event Listeners
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
-    const query = formInput.value;
-    const conversationId = localStorage.getItem("conversationId");
-    if (firstTitle) {
-      createNewChat(query);
-    } else {
-      displayChatMessage(query + "?", "question", messagesDiv);
-      updateMessageHistory(query, "user", messageHistory);
-      const apiResponse = await apiFetch(messageHistory);
-      const messageContent = apiResponse.data.choices[0].message.content;
-      updateMessageHistory(messageContent, "assistant", messageHistory);
-      displayChatMessage(marked.parse(messageContent), "answer", messagesDiv);
-      newMessage("question", userId, conversationId, query + "?");
-      newMessage("answer", userId, conversationId, messageContent);
+    if (!loading) {
+      loading = true;
+      setLoading(loading);
+
+      const query = formInput.value;
+      const conversationId = localStorage.getItem("conversationId");
+      if (firstTitle) {
+        await createNewChat(query);
+      } else {
+        formInput.value = "";
+        displayChatMessage(query + "?", "question", messagesDiv);
+        updateMessageHistory(query, "user", messageHistory);
+        const apiResponse = await apiFetch(messageHistory);
+        if (apiResponse) {
+          const messageContent = apiResponse.data.choices[0].message.content;
+          updateMessageHistory(messageContent, "assistant", messageHistory);
+          displayChatMessage(
+            marked.parse(messageContent),
+            "answer",
+            messagesDiv
+          );
+          newMessage("question", userId, conversationId, query + "?");
+          newMessage("answer", userId, conversationId, messageContent);
+        }
+        loading = false;
+        setLoading(loading);
+      }
     }
   });
 
@@ -212,53 +234,47 @@ const app = async () => {
     firstTitle = true;
     clearChat();
     chatLabel.innerHTML =
-      "Enter chat name below to comtinue (atleast 3 characters)";
+      "Enter chat name below to continue (at least 3 characters)";
     formInput.min = 3;
-    formInput.placeholder = "Enter chat name ";
+    formInput.placeholder = "Enter chat name";
   });
 
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("conservationId");
+    localStorage.removeItem("conversationId");
     localStorage.removeItem("history");
     window.location.href = "http://127.0.0.1:5500/client/src/html/login.html#";
-  });
-
-  const deleteBtn = document.querySelector(".bin-btn");
-
-  deleteBtn.addEventListener("click", () => {
-    const conversationId = localStorage.getItem("conversationId");
-    console.log(conversationId);
-    deleteConversationWithMesssages(conversationId);
   });
 
   document.addEventListener("click", (event) => {
     conversationId = localStorage.getItem("conversationId");
     if (conversationId) {
-      const conversationHighlight = document.getElementById(
-        `${conversationId}`
-      );
-      conversationHighlight.style.backgroundColor = "";
+      const element = document.getElementById(conversationId);
+      if (element) {
+        element.style.backgroundColor = "#222";
+      }
     }
+
     if (event.target.classList.contains("action-bar-li")) {
       clearChat();
-      const chatId = event.target.id;
-      fetchMessages(chatId);
-      localStorage.setItem("conversationId", chatId);
-      const conversationHighlight = document.getElementById(`${chatId}`);
-      conversationHighlight.style.backgroundColor = "#4a4949";
+      fetchMessages(event.target.id);
+      localStorage.setItem("conversationId", event.target.id);
+      event.target.style.backgroundColor = "#4a4949";
+    }
+
+    if (event.target.classList.contains("bin-btn")) {
+      deleteConversationWithMesssages(event.target.parentElement.id);
+      const chats = document.querySelectorAll(".action-bar-li");
+      if (chats.length > 0) {
+        const newChatId = chats[0].id;
+        fetchMessages(newChatId);
+        localStorage.setItem("conversationId", newChatId);
+        const conversationHighlight = document.getElementById(newChatId);
+        conversationHighlight.style.backgroundColor = "#4a4949";
+      }
+      clearChat();
     }
   });
-
-  if (messageHistory.length > 0) {
-    messageHistory.forEach(({ role, content }) => {
-      displayChatMessage(
-        content,
-        role === "user" ? "question" : "answer",
-        messagesDiv
-      );
-    });
-  }
 };
 
 app();

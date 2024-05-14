@@ -286,6 +286,25 @@ button[type="submit"]:hover {
   background-color: rgba(18, 18, 18, 0.767);
 }
 
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  display: none; /* Initially hidden */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @media (width > 500px) {
   #chat-messages {
     width: 70vw;
