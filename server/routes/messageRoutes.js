@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const MessageHistory = require("./schemas/messageHistorySchema");
+const MessageHistory = require("../schemas/messageHistorySchema");
 
 // GET all messages
 router.get("/messages", async (req, res) => {
