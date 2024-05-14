@@ -1,9 +1,10 @@
 const Conversation = require("../schemas/conversationSchema");
+const MessageHistory = require("../schemas/messageHistorySchema")
 const express = require("express")
 const router = express.Router()
 const verifyToken = require("../verifyToken")
 
-router.get("/conversations", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const conversations = await Conversation.find();
     res.json(conversations);
@@ -12,7 +13,7 @@ router.get("/conversations", async (req, res) => {
   }
 });
 
-router.get("/conversations/user/:id", verifyToken, async (req, res) => {
+router.get("/user/:id", verifyToken, async (req, res) => {
   try {
     const conversations = await Conversation.find({
       userId: req.params.id,
@@ -23,7 +24,7 @@ router.get("/conversations/user/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/conversations/one/:id", async (req, res) => {
+router.get("/one/:id", async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);
     const messages = await MessageHistory.find({
@@ -35,7 +36,7 @@ router.get("/conversations/one/:id", async (req, res) => {
   }
 });
 
-router.post("/conversations", async (req, res) => {
+router.post("/", async (req, res) => {
   const { conversationName, userId } = req.body;
   const newConversation = new Conversation({
     conversationName,
@@ -44,13 +45,14 @@ router.post("/conversations", async (req, res) => {
 
   try {
     const savedConversation = await newConversation.save();
+    console.log(savedConversation)
     res.status(201).json(savedConversation);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
-router.delete("/conversations/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const deletedConversation = await Conversation.findByIdAndDelete(
       req.params.id
@@ -64,7 +66,7 @@ router.delete("/conversations/:id", async (req, res) => {
   }
 });
 
-router.delete("/conversations/all/:id", async (req, res) => {
+router.delete("/all/:id", async (req, res) => {
   try {
     const deletedConversation = await Conversation.find({
       userId: req.params.id,
