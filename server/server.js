@@ -4,19 +4,18 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const User = require("./schemas/userSchema");
 const Conversation = require("./schemas/conversationSchema");
 const MessageHistory = require("./schemas/messageHistorySchema");
 const googleAuth = require("./google-auth/google-auth");
-require("dotenv").config();
 const path = require("node:path")
+require("dotenv").config();
+require("./db") // initialise db connection
 
 const app = express();
 
-
 app.use(express.static(path.join(process.cwd(),"../client/src")))
-// Index route needs to be above the router middleware
+// Index route needs to be ABOVE the router middleware
 app.get("/", ( _, res ) => {
   res.sendFile(path.join(__dirname, '../client/src/html', 'index.html'))
 })
@@ -27,21 +26,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-mongoose.connect(process.env.DATABASE_CONNECTION);
-
-mongoose.connection.on("connected", () => {
-  console.log("Connected to the database");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.error(`Error connecting to the database: ${err}`);
-});
-
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`listening on port: ${port}`);
 });
-
 
 // GOOGLE API
 
