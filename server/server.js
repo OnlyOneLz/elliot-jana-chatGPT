@@ -4,10 +4,10 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const router = express.Router();
 const conversationRoutes = require("./routes/conversationRoutes")
+const messageRoutes = require("./routes/messageRoutes")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./schemas/userSchema");
-const MessageHistory = require("./schemas/messageHistorySchema");
 const googleAuth = require("./google-auth/google-auth");
 const verifyToken = require("./verifyToken")
 require("dotenv").config();
@@ -144,59 +144,4 @@ app.use("/conversations", conversationRoutes)
 
 // Message History
 
-// GET all messages
-app.get("/messages", async (req, res) => {
-  try {
-    const messages = await MessageHistory.find();
-    res.json(messages);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/messages/:id", async (req, res) => {
-  try {
-    const messages = await MessageHistory.find({
-      conversationId: req.params.id,
-    });
-    res.json(messages);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// POST a new message
-app.post("/messages", async (req, res) => {
-  const { role, userId, conversationId, message } = req.body;
-  const newMessage = new MessageHistory({
-    role,
-    userId,
-    conversationId,
-    message,
-  });
-
-  try {
-    const savedMessage = await newMessage.save();
-    res.status(201).json(savedMessage);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// DELETE a message
-app.delete("/messages/:id", async (req, res) => {
-  try {
-    const deletedMessages = await MessageHistory.deleteMany({
-      conversationId: req.params.id,
-    });
-    if (deletedMessages.deletedCount === 0) {
-      return res.status(404).json({ message: "Messages not found" });
-    }
-    res.json({
-      message: "Messages deleted",
-      count: deletedMessages.deletedCount,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+app.use("/messages", messageRoutes)
