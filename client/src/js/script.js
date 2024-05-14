@@ -221,7 +221,7 @@ const app = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("conservationId");
     localStorage.removeItem("history");
-    window.location.href = "http://127.0.0.1:5500/client/src/html/login.html#";
+    window.location.href = "http://localhost:4000/login";
   });
 
   const deleteBtn = document.querySelector(".bin-btn");
