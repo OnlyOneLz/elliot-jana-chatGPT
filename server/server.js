@@ -21,6 +21,10 @@ app.get("/", ( _, res ) => {
   res.sendFile(path.join(__dirname, '../client/src/html', 'index.html'))
 })
 
+app.get("/login", ( _, res ) => {
+  res.sendFile(path.join(__dirname, '../client/src/html', 'login.html'))
+})
+
 app.use("/app/", router);
 app.use(cors());
 app.use(express.json());

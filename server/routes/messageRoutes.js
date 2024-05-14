@@ -3,7 +3,7 @@ const router = express.Router()
 const MessageHistory = require("../schemas/messageHistorySchema");
 
 // GET all messages
-router.get("/messages", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const messages = await MessageHistory.find();
     res.json(messages);
@@ -12,7 +12,7 @@ router.get("/messages", async (req, res) => {
   }
 });
 
-router.get("/messages/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const messages = await MessageHistory.find({
       conversationId: req.params.id,
@@ -24,7 +24,7 @@ router.get("/messages/:id", async (req, res) => {
 });
 
 // POST a new message
-router.post("/messages", async (req, res) => {
+router.post("/", async (req, res) => {
   const { role, userId, conversationId, message } = req.body;
   const newMessage = new MessageHistory({
     role,
@@ -42,7 +42,7 @@ router.post("/messages", async (req, res) => {
 });
 
 // DELETE a message
-router.delete("/messages/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const deletedMessages = await MessageHistory.deleteMany({
       conversationId: req.params.id,
