@@ -1,14 +1,15 @@
+const path = require("node:path")
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const router = express.Router();
+const conversationRoutes = require("./routes/conversationRoutes")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./schemas/userSchema");
-const Conversation = require("./schemas/conversationSchema");
 const MessageHistory = require("./schemas/messageHistorySchema");
 const googleAuth = require("./google-auth/google-auth");
-const path = require("node:path")
+const verifyToken = require("./verifyToken")
 require("dotenv").config();
 require("./db") // initialise db connection
 
@@ -64,25 +65,6 @@ app.post("/Api-fetch", async (req, res) => {
 });
 
 // Token Verification
-
-function verifyToken(req, res, next) {
-  const token = req.headers["authorization"];
-
-  if (!token) {
-    return res.status(401).json({ message: "No token provided." });
-  }
-  jwt.verify(
-    token.replace("Bearer ", ""),
-    process.env.JWT_SECRET_KEY,
-    (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: "Invalid token." });
-      }
-      req.userId = decoded.userId;
-      next();
-    }
-  );
-}
 
 app.get("/protected", verifyToken, (req, res) => {
   res.json({ message: "This route is protected.", userId: req.userId });
@@ -158,80 +140,7 @@ app.delete("/users/:id", async (req, res) => {
 
 // Conversations
 
-app.get("/conversations", async (req, res) => {
-  try {
-    const conversations = await Conversation.find();
-    res.json(conversations);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/conversations/user/:id", verifyToken, async (req, res) => {
-  try {
-    const conversations = await Conversation.find({
-      userId: req.params.id,
-    }).sort({ createdAt: -1 });
-    res.json(conversations);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/conversations/one/:id", async (req, res) => {
-  try {
-    const conversation = await Conversation.findById(req.params.id);
-    const messages = await MessageHistory.find({
-      conversationId: req.params.id,
-    });
-    res.json({ conversation: conversation, messages: messages });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.post("/conversations", async (req, res) => {
-  const { conversationName, userId } = req.body;
-  const newConversation = new Conversation({
-    conversationName,
-    userId,
-  });
-
-  try {
-    const savedConversation = await newConversation.save();
-    res.status(201).json(savedConversation);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-app.delete("/conversations/:id", async (req, res) => {
-  try {
-    const deletedConversation = await Conversation.findByIdAndDelete(
-      req.params.id
-    );
-    if (!deletedConversation) {
-      return res.status(404).json({ message: "Conversation not found" });
-    }
-    res.json({ message: "Conversation deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.delete("/conversations/all/:id", async (req, res) => {
-  try {
-    const deletedConversation = await Conversation.find({
-      userId: req.params.id,
-    });
-    if (!deletedConversation) {
-      return res.status(404).json({ message: "Conversation not found" });
-    }
-    res.json({ message: "Conversation deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+app.use("/conversations", conversationRoutes)
 
 // Message History
 
