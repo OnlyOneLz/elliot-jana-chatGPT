@@ -10,8 +10,16 @@ const Conversation = require("./schemas/conversationSchema");
 const MessageHistory = require("./schemas/messageHistorySchema");
 const googleAuth = require("./google-auth/google-auth");
 require("dotenv").config();
+const path = require("node:path")
 
 const app = express();
+
+
+app.use(express.static(path.join(process.cwd(),"../client/src")))
+// Index route needs to be above the router middleware
+app.get("/", ( _, res ) => {
+  res.sendFile(path.join(__dirname, '../client/src/html', 'index.html'))
+})
 
 app.use("/app/", router);
 app.use(cors());
@@ -33,6 +41,7 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`listening on port: ${port}`);
 });
+
 
 // GOOGLE API
 
