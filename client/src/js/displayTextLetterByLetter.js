@@ -1,7 +1,7 @@
 async function displayTextLetterByLetter(text, element, role) {
   if (role === "question") {
     element.innerHTML = text;
-    return;
+    return; // don't animate questions
   }
 
   // Attach the text to a temporary container so we can extract the nodes
@@ -12,6 +12,7 @@ async function displayTextLetterByLetter(text, element, role) {
   // Recursively animate each node
   await animateNodes(temporaryDiv.childNodes, element);
 
+  // finally, delete the temp container
   temporaryDiv.parentNode.removeChild(temporaryDiv);
 }
 
@@ -46,7 +47,7 @@ async function animateTextNode(node, parentElement) {
         clearInterval(intervalId);
         resolve();
       }
-    }, 20); // Adjust the interval as needed for desired speed
+    }, 20);
   });
 }
 
