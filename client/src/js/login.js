@@ -16,7 +16,7 @@ const app = () => {
     const validToken = await checkAuthentication();
     if (validEmail && validToken) {
       window.location.href =
-        "http://127.0.0.1:5500/client/src/html/index.html#";
+        "/";
     }
   };
 
@@ -29,7 +29,7 @@ const app = () => {
 
   const fetchUser = async (email, password) => {
     try {
-      const response = await fetch("http://localhost:4000/user/get", {
+      const response = await fetch("/user/get", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const app = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:4000/protected", {
+      const response = await fetch("/protected", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -97,12 +97,12 @@ const app = () => {
   }
 
   const startGoogleFlow = async () => {
-    window.location.href = "http://localhost:4000/auth/google";
+    window.location.href = "/auth/google";
   };
 
   const newSignup = async () => {
     try {
-      const response = await fetch("http://localhost:4000/users", {
+      const response = await fetch("/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,8 +115,7 @@ const app = () => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("token", data.value);
-        window.location.href =
-          "http://127.0.0.1:5500/client/src/html/index.html#";
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Error verifying token:", error);
