@@ -12,8 +12,7 @@ async function displayTextLetterByLetter(text, element, role) {
   // Recursively animate each node
   await animateNodes(temporaryDiv.childNodes, element);
 
-  // finally, delete the temp container
-  temporaryDiv.parentNode.removeChild(temporaryDiv);
+  // no need to delete temp div, as it was never appended to the DOM
 }
 
 async function animateNodes(nodes, parentElement) {
@@ -38,16 +37,16 @@ async function animateTextNode(node, parentElement) {
 
   return new Promise((resolve) => {
     let index = 0;
-    const text = node.textContent;
+    const words = node.textContent.split(" ");
     const intervalId = setInterval(() => {
-      if (index < text.length) {
-        textNode.textContent += text[index];
+      if (index < words.length) {
+        textNode.textContent = textNode.textContent + words[index] + " ";
         index++;
       } else {
         clearInterval(intervalId);
         resolve();
       }
-    }, 20);
+    }, 50);
   });
 }
 
