@@ -2,6 +2,7 @@ import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 import updateMessageHistory from "../js/updateMessageHistory.js";
 import apiFetch from "../js/apiFetch.js";
 import displayChatMessage from "../js/displayChatMessage.js";
+import displayOldChatMessage from "../js/displayOldChatMessage.js";
 import getUser from "../js/getUser.js";
 import createConversation from "../js/createConversation.js";
 import newMessage from "./newMessage.js";
@@ -85,7 +86,7 @@ const app = async () => {
           message.role === "question" ? "user" : "assistant",
           messageHistory
         );
-        displayChatMessage(
+        displayOldChatMessage(
           message.role === "question"
             ? message.message
             : marked.parse(message.message),
