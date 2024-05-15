@@ -3,6 +3,7 @@ export const updateMessageHistory = (data, role, messageHistory) => {
     role: role,
     content: data,
   });
+  console.log(messageHistory);
   localStorage.setItem("history", JSON.stringify(messageHistory));
 };
 

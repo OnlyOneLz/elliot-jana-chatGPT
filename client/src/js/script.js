@@ -61,7 +61,9 @@ const app = async () => {
 
   const createNewChat = async (query) => {
     const messageTitle = query;
-    createConversation(userId, messageTitle);
+    createConversation(userId, messageTitle, getChats);
+    loading = false;
+    setLoading(loading);
     firstTitle = false;
     formInput.min = 0;
     clearChat();
@@ -246,13 +248,6 @@ const app = async () => {
     localStorage.removeItem("history");
     window.location.href = "http://localhost:4000/login";
   });
-
-  const deleteBtn = document.querySelector(".bin-btn");
-
-  deleteBtn.addEventListener("click", () => {
-    const conversationId = localStorage.getItem("conversationId");
-    console.log(conversationId);
-    deleteConversationWithMesssages(conversationId);
 
   document.addEventListener("click", (event) => {
     conversationId = localStorage.getItem("conversationId");
