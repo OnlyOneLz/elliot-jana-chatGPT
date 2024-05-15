@@ -17,7 +17,6 @@ const displayChatMessage = (content, role, messagesDiv) => {
   displayTextLetterByLetter(content, messageText, role);
   thisMessage.appendChild(messageTitle);
   thisMessage.appendChild(messageText);
-
   messagesDiv.appendChild(thisMessage);
 };
 
