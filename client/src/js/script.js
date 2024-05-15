@@ -247,6 +247,13 @@ const app = async () => {
     window.location.href = "http://localhost:4000/login";
   });
 
+  const deleteBtn = document.querySelector(".bin-btn");
+
+  deleteBtn.addEventListener("click", () => {
+    const conversationId = localStorage.getItem("conversationId");
+    console.log(conversationId);
+    deleteConversationWithMesssages(conversationId);
+
   document.addEventListener("click", (event) => {
     conversationId = localStorage.getItem("conversationId");
     if (conversationId) {
